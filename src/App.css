@@ -47,7 +47,7 @@
 }
 .GenerateIDCard--listGroupItem {
   text-align: left;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 .GenerateIDCard--listGroupItem:hover {
   cursor: pointer;

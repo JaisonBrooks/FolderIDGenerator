@@ -109,7 +109,7 @@ function App() {
   }
 
   const addToIDs = (data) => {
-    setIds(ids.concat(newID(data)));
+    setIds([newID(data)].concat(ids));
   };
 
   const renderIDs = () => {

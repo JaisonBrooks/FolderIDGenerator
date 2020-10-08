@@ -1,38 +1,62 @@
+
 .App {
-  text-align: center;
+  font-size: calc(10px + 1.5vmin);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
+.App-wrapper {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.GenerateIDCard {
+  margin-top: 2rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.GenerateIDCard--cardbody {
+  text-align: left;
+}
+
+.GenerateIDCard--formGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.GenerateIDCard--formGroup label {
+  text-transform: capitalize;
+}
+.GenerateIDCard--formGroup label, input, textarea {
+  width: 50%;
+}
+
+.Button--wide {
+  width: 100%;
+  font-size: 18px;
+}
+
+.GenerateIDCard--listGroup {
+  list-style-type: none;
+  padding: 0;
+  min-width: 26rem;
+  margin-bottom: 0;
+}
+.GenerateIDCard--listGroupItem {
+  text-align: left;
+  font-size: 1.5rem;
+}
+.GenerateIDCard--listGroupItem:hover {
+  cursor: pointer;
+  background-color: '';
+}
+.GenerateIDCard--listGroupItem:last-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.GenerateIDCard--listGroupItem:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }

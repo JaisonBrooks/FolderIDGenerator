@@ -55,7 +55,7 @@ const form = {
     {
       key: 'category',
       label: 'Category',
-      component: FormTextarea,
+      component: FormInput,
       defaultValue: '',
       placeholder: '',
       rules: {

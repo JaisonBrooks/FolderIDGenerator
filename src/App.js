@@ -132,7 +132,7 @@ function App() {
   }
 
   const renderAlert = () => {
-    return alert && <Alert theme="success">{alert}</Alert>
+    return alert && <Alert className="Alert--small" theme="success">{alert}</Alert>
   }
 
   useInterval(() => {

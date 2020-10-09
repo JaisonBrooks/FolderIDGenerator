@@ -23,7 +23,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useForm, Controller } from "react-hook-form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
-import { ListUl } from "react-bootstrap-icons";
+import { ListUl, CodeSlash } from "react-bootstrap-icons";
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
 
@@ -206,20 +206,29 @@ function App() {
               <Card className="GenerateIDCard mt-lg-0">
                 <CardHeader className="GenerateIDCard--header">
                   <p>{form.title}</p>
-                  <span
-                    id="showHistory"
-                    className="Icon--clickable"
-                    onClick={() => setShowHistory(!showHistory)}
-                  >
-                    <Tooltip
-                      open={showHistoryTooltip}
-                      target="#showHistory"
-                      toggle={() => setShowHistoryTooltip(!showHistoryTooltip)}
+                  <div>
+                    <span
+                      id="openGithub"
+                      className="Icon--clickable mr-4"
+                      onClick={() => window.open("https://github.com/JaisonBrooks/FolderIDGenerator", "_blank")}
                     >
-                      Click to show/hide history
-                    </Tooltip>
-                    <ListUl />
-                  </span>
+                      <CodeSlash />
+                    </span>
+                    <span
+                      id="showHistory"
+                      className="Icon--clickable"
+                      onClick={() => setShowHistory(!showHistory)}
+                    >
+                      <Tooltip
+                        open={showHistoryTooltip}
+                        target="#showHistory"
+                        toggle={() => setShowHistoryTooltip(!showHistoryTooltip)}
+                      >
+                        Click to show/hide history
+                      </Tooltip>
+                      <ListUl />
+                    </span>
+                  </div>
                 </CardHeader>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <CardBody className={`GenerateIDCard--cardbody ${(showHistory || alert) && 'GenerateIDCard--cardbody-expanded'}`}>

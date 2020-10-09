@@ -1,4 +1,5 @@
 # Folder Name Generator
+A simple react app that takes a few inputs and generates a simple string "@X@Y@Z@.." and copies it to clipboard, also maintains history of generated strings in local storage. 
 
 ## Available Scripts
 

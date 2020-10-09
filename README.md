@@ -32,7 +32,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `npm run deploy`
 
-If you need to deploy changes you can do so be running this command, it uses `surge` which you can find more information on [here](https://surge.sh/), you will need to setup your own account and updated the *package.json* file deploy command with your specific *surge domain of choice*.
+Deploy your lastest production build, this command uses `surge` which you can find more information on [here](https://surge.sh/), **Note**: you might need to setup your own surge account and update the ```deploy``` command in your ```package.json``` file with your specific *surge* configuration
 
 ### `npm run eject`
 

@@ -8,7 +8,10 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.2",
+    "copy-to-clipboard": "^3.3.1",
+    "dayjs": "^1.9.1",
     "react": "^16.13.1",
+    "react-bootstrap-icons": "^1.0.0",
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.9.2",
@@ -19,7 +22,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && cd build && surge --domain maas-folder-name-generator.surge.sh"
   },
   "eslintConfig": {
     "extends": "react-app"

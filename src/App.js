@@ -1,5 +1,5 @@
 // Author: Jaison Brooks
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -12,187 +12,275 @@ import {
   Container,
   Row,
   Col,
+  Collapse,
   ListGroup,
   ListGroupItem,
   Alert,
-  FormFeedback,
+  Tooltip,
   FormTextarea,
 } from "shards-react";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useForm, Controller } from "react-hook-form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
+import { ListUl } from "react-bootstrap-icons";
+import copy from 'copy-to-clipboard';
+import dayjs from 'dayjs';
 
-import { useInterval, useStickyState } from './helpers';
+import { useStickyState } from "./helpers";
 import "./App.css";
 
+const ALERT_TIMEOUT = 5555;
+
 const form = {
-  title: 'OG Folder Namer',
-  listTitle: 'Generated Names',
+  title: "OG Folder Namer",
+  listTitle: "History",
   fields: [
     {
-      key: 'price',
-      label: 'Price',
+      key: "price",
+      label: "Price",
       component: FormInput,
-      defaultValue: '',
-      placeholder: '',
+      defaultValue: "",
+      placeholder: "",
       rules: {
         required: true,
         maxLength: 20,
-      }
+      },
     },
     {
-      key: 'sku',
-      label: 'SKU',
+      key: "sku",
+      label: "SKU",
       component: FormInput,
-      defaultValue: '',
-      placeholder: '',
+      defaultValue: "",
+      placeholder: "",
       rules: {
         required: true,
         maxLength: 100,
-      }
+      },
     },
     {
-      key: 'category',
-      label: 'Category',
+      key: "category",
+      label: "Category",
       component: FormInput,
-      defaultValue: '',
-      placeholder: '',
+      defaultValue: "",
+      placeholder: "",
       rules: {
         required: true,
         maxLength: 250,
-      }
+      },
     },
     {
-      key: 'description',
-      label: 'Description',
+      key: "description",
+      label: "Description",
       component: FormTextarea,
-      defaultValue: '',
-      placeholder: '',
+      defaultValue: "",
+      placeholder: "",
       rules: {
         required: true,
         maxLength: 250,
-      }
+      },
     },
     {
-      key: 'weight',
-      label: 'Weight',
+      key: "weight",
+      label: "Weight",
       component: FormInput,
-      defaultValue: '',
-      placeholder: '',
+      defaultValue: "",
+      placeholder: "",
       rules: {
         required: true,
         maxLength: 50,
-      }
+      },
     },
     {
-      key: 'size',
-      label: 'Size',
+      key: "size",
+      label: "Size",
       component: FormInput,
-      defaultValue: '',
-      placeholder: '',
+      defaultValue: "",
+      placeholder: "",
       rules: {
         required: true,
         maxLength: 50,
-      }
+      },
     },
   ],
-}
+};
 
 function App() {
   const { control, handleSubmit, errors } = useForm();
   const [alert, setAlert] = useState(null);
-  const [ids, setIds] = useStickyState([], 'folder-names')
+  const [showHistoryTooltip, setShowHistoryTooltip] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [folderNames, setFolderNames] = useStickyState([], "folder-names");
 
-  const newID = (data) => {
+  const toFolderName = (data) => {
     return `@${data.price}@${data.sku}@${data.category}@${data.description}@${data.weight}@${data.size}@`;
+  };
+
+  const setCopiedAlert = (name) => {
+    setAlert({
+      text: name,
+      subtext: 'copied to clipboard',
+      type: 'success'
+    });
   }
 
-  const addToIDs = (data) => {
-    setIds([newID(data)].concat(ids));
+  const addToFolderNames = (name) => {
+    const newFolderName = {
+      value: name,
+      date: dayjs().format()
+    };
+    setFolderNames([newFolderName].concat(folderNames));
   };
 
   const renderIDs = () => {
-    return ids.map((item, index) => {
+    return folderNames.map((item, index) => {
+      const { date, value } = item;
       return (
-          <CopyToClipboard text={item} onCopy={() => setAlert(`${item} copied!`)} key={index}>
-            <ListGroupItem key={index} className="GenerateIDCard--listGroupItem">{item}</ListGroupItem>
-          </CopyToClipboard>
+        <CopyToClipboard
+          text={value}
+          onCopy={() => setCopiedAlert(value)}
+          key={index}
+        >
+          <ListGroupItem key={index} className="GenerateIDCard--listGroupItem">
+            {value}
+            <p style={{fontSize: '1rem', fontStyle: 'italic', marginBottom: '0'}}>{date}</p>
+          </ListGroupItem>
+        </CopyToClipboard>
       );
     });
   };
 
   const onSubmit = (data) => {
-    addToIDs(data);
-  }
+    const name = toFolderName(data);
+    copy(name);
+    addToFolderNames(name);
+    setCopiedAlert(name);
+  };
 
   const clearIDs = () => {
-    setIds([]);
+    setShowHistory(false);
+    setFolderNames([]);
     setAlert(null);
-  }
+  };
 
   const renderAlert = () => {
-    return alert && <Alert className="Alert--small" theme="success">{alert}</Alert>
+    return (
+      alert && (
+        <Alert className="CopyAlert" theme="success" dismissible={() => setAlert(null)} open={alert}>
+          {alert.text}
+          {
+            alert.subtext && <p style={{marginBottom: 0, fontSize: '1rem'}}>{alert.subtext}</p>
+          }
+        </Alert>
+      )
+    );
+  };
+
+  const useInterval = (callback, delay) => {
+    const savedCallback = useRef();
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
   }
 
   useInterval(() => {
     setAlert(null);
-  }, 3000);
+  }, ALERT_TIMEOUT);
 
   return (
     <div className="App">
       <div className="App-wrapper">
-        <Container>
+        <Container className="px-sm-2">
           <Row>
-            <Col lg="6">
+            <Col lg={{ size: 8, offset: 2 }} md={{ size: 10, offset: 1}}>
               <Card className="GenerateIDCard mt-lg-0">
-                <CardHeader>{form.title}</CardHeader>
+                <CardHeader className="GenerateIDCard--header">
+                  <p>{form.title}</p>
+                  <span
+                    id="showHistory"
+                    className="Icon--clickable"
+                    onClick={() => setShowHistory(!showHistory)}
+                  >
+                    <Tooltip
+                      open={showHistoryTooltip}
+                      target="#showHistory"
+                      toggle={() => setShowHistoryTooltip(!showHistoryTooltip)}
+                    >
+                      Click to show/hide history
+                    </Tooltip>
+                    <ListUl />
+                  </span>
+                </CardHeader>
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                <CardBody className="GenerateIDCard--cardbody">
-                    {
-                      form.fields.map((field, i) => {
-                        const { key, rules, component, defaultValue, placeholder, label } = field;
-                        return <FormGroup className="GenerateIDCard--formGroup" key={i}>
+                  <CardBody className={`GenerateIDCard--cardbody ${(showHistory || alert) && 'GenerateIDCard--cardbody-expanded'}`}>
+                    {form.fields.map((field, i) => {
+                      const {
+                        key,
+                        rules,
+                        component,
+                        defaultValue,
+                        placeholder,
+                        label,
+                      } = field;
+                      return (
+                        <FormGroup
+                          className="GenerateIDCard--formGroup"
+                          key={i}
+                        >
                           <label htmlFor={key}>{label}</label>
-                          <Controller 
+                          <Controller
                             as={component}
-                            name={key} 
-                            control={control} 
-                            rules={rules} 
+                            name={key}
+                            control={control}
+                            rules={rules}
                             defaultValue={defaultValue}
-                            placeholder={errors[key] ? `${key} is required` : placeholder}
+                            placeholder={
+                              errors[key] ? `${key} is required` : placeholder
+                            }
                             invalid={errors[key] ? true : false}
                           />
                         </FormGroup>
-                      })
-                    }
-                    <FormFeedback valid={false}></FormFeedback>
-                </CardBody>
-                <CardFooter>
-                  <Button type="submit" className="Button--wide" pill>Generate</Button>
-                </CardFooter>
-                </Form>
-              </Card>
-            </Col>
-            <Col lg="6">
-                  <Card className="GenerateIDCard GenerateIDCard--list mt-lg-0">
-                    <CardHeader>
-                      {form.listTitle}
-                    </CardHeader>
-                    {ids.length > 0 ? (
-                      <>
-                        {renderAlert()}
-                        <ListGroup className="GenerateIDCard--listGroup">
-                          {renderIDs()}
-                        </ListGroup>
-                        <CardFooter>
-                          <Button className="Button--wide" pill theme="light" onClick={() => clearIDs()}>
+                      );
+                    })}
+                    <Collapse open={alert !== null}>
+                      {renderAlert()}
+                    </Collapse>
+                    <Collapse open={showHistory}>
+                      <hr className="my-4" />
+                      {folderNames.length > 0 ? (
+                        <>
+                          <h5 className="History--title">History</h5>
+                          <ListGroup className="GenerateIDCard--listGroup">
+                            {renderIDs()}
+                          </ListGroup>
+                          <Button className="Button--clear mt-2" theme="light" pill onClick={() => clearIDs()}>
                             Clear
                           </Button>
-                        </CardFooter>
-                      </>
-                    ) : <p style={{padding: '1rem', margin: 0, textAlign: 'center', color: '#a0a0a0', fontSize: '18px', fontStyle: 'italic'}}>No names created</p>}
-                  </Card>
+                        </>
+                      ) : (
+                        <p className="History--emptyStateText">
+                          No folder names...
+                        </p>
+                      )}
+                    </Collapse>
+                  </CardBody>
+                  <CardFooter>
+                    <Button type="submit" className="Button--wide" pill>
+                      Generate
+                    </Button>
+                  </CardFooter>
+                </Form>
+              </Card>
             </Col>
           </Row>
         </Container>

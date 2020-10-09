@@ -10,7 +10,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: 1rem;
 }
 
 .Button--wide {
@@ -18,16 +18,63 @@
   font-size: 18px;
 }
 
-.Alert--small {
+.Button--clear {
+  display: flex;
+  flex-direction: row;
+  justify-self: flex-end;
+}
+
+.CopyAlert {
   font-size: 1.25rem;
+}
+.CopyAlert--helperText {
+  font-style: 'italic';
+  font-size: '14px';
+}
+
+.Icon--clickable:hover {
+  cursor: pointer;
+}
+
+.History--title {
+  margin-bottom: 1rem;
+}
+
+.History--emptyStateText {
+  font-style: italic;
+  margin: 0;
+  font-size: 18px;
 }
 
 .GenerateIDCard {
   margin-top: 2rem;
 }
 
+.GenerateIDCard--header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.GenerateIDCard--header p {
+  margin: 0;
+}
+
 .GenerateIDCard--cardbody {
   text-align: left;
+  -webkit-transition: height 500ms ease;
+  -moz-transition: height 500ms ease;
+    -o-transition: height 500ms ease;
+   -ms-transition: height 500ms ease;
+       transition: height 500ms ease;
+}
+
+.GenerateIDCard--cardbody-expanded {
+  -webkit-transition: height 500ms ease;
+  -moz-transition: height 500ms ease;
+    -o-transition: height 500ms ease;
+   -ms-transition: height 500ms ease;
+       transition: height 500ms ease;
 }
 
 .GenerateIDCard--formGroup {
@@ -46,7 +93,6 @@
 .GenerateIDCard--listGroup {
   list-style-type: none;
   padding: 0;
-  min-width: 26rem;
   margin-bottom: 0;
 }
 .GenerateIDCard--listGroupItem {

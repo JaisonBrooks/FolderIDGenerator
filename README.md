@@ -30,6 +30,10 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run deploy`
+
+If you need to deploy changes you can do so be running this command, it uses `surge` which you can find more information on [here](https://surge.sh/), you will need to setup your own account and updated the *package.json* file deploy command with your specific *surge domain of choice*.
+
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
